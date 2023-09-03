@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import {ICON_SIZE} from './constants';
+import {ICON_PRECISION, ICON_SIZE} from './constants';
 import svg2ttf from './svg2ttf';
 import elementToPath from 'element-to-path';
 import Commander from 'svg-path-commander';
@@ -106,7 +106,7 @@ const node2path = ( node: Node ): string => {
 
       if ( !path ) return '';
 
-      return Commander.pathToString ( Commander.transformPath ( Commander.transformPath ( path, { translate: [-viewport[0], -viewport[1]], scale: [ICON_SIZE / viewport[2], ICON_SIZE / viewport[3]], origin: [0, 0] } ), { scale: [1, -1], origin: [ICON_SIZE / 2, ICON_SIZE / 2] } ), 2 );
+      return Commander.pathToString ( Commander.transformPath ( Commander.transformPath ( path, { translate: [-viewport[0], -viewport[1]], scale: [ICON_SIZE / viewport[2], ICON_SIZE / viewport[3]], origin: [0, 0] } ), { scale: [1, -1], origin: [ICON_SIZE / 2, ICON_SIZE / 2] } ), ICON_PRECISION );
 
     } else if ( node.name === 'g' ) {
 
