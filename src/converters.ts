@@ -106,7 +106,7 @@ const node2path = ( node: Node ): string => {
 
       if ( !path ) return '';
 
-      return Commander.pathToString ( Commander.transformPath ( Commander.transformPath ( path, { translate: [-viewport[0], -viewport[1]], scale: [ICON_SIZE / viewport[2], ICON_SIZE / viewport[3]], origin: [0, 0] } ), { scale: [1, -1], origin: [ICON_SIZE / 2, ICON_SIZE / 2] } ), ICON_PRECISION );
+      return Commander.pathToString ( Commander.transformPath ( path, { translate: [-viewport[0], ICON_SIZE - viewport[1]], scale: [ICON_SIZE / viewport[2], - ICON_SIZE / viewport[3]], origin: [0, 0] } ), ICON_PRECISION );
 
     } else if ( node.name === 'g' ) {
 
