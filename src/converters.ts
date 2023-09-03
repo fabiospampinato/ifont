@@ -7,7 +7,7 @@ import elementToPath from 'element-to-path';
 import svgpath from 'svgpath';
 import XML from 'xml-simple-parser';
 import type {Node} from 'xml-simple-parser';
-import type {Glyph, Icon} from './types';
+import type {Glyph, Icon, PathSegment} from './types';
 
 /* MAIN */
 
@@ -89,6 +89,49 @@ const icons2ttf = ( icons: Icon[] ): Uint8Array => {
 
 };
 
+const path2segments = (() => {
+
+  const ARGS_COUNT = { M: 2, m: 2, L: 2, l: 2, H: 1, h: 1, V: 1, v: 1, C: 6, c: 6, S: 4, s: 4, Q: 4, q: 4, T: 2, t: 2, A: 7, a: 7, Z: 0 };
+  const PARSE_RE = /([a-zA-Z])|(-?\d+(?:\.\d+)?)/g;
+
+  return ( path: string ): PathSegment[] => { //TODO: Maybe validate that `args` is 0, and `lastIndex` is `path.length`
+
+    const segments: [string, ...number[]][] = [];
+
+    let fn = '';
+    let args = 0;
+    let segment: [string, ...number[]] | undefined;
+
+    for ( const match of path.matchAll ( PARSE_RE ) ) {
+
+      if ( match[1] ) { // New explicit segment
+
+        fn = match[1];
+        args = ARGS_COUNT[fn] || 0;
+        segment = [fn];
+        segments.push ( segment );
+
+      } else if ( args > 0 ) { // New argument
+
+        args -= 1;
+        segment!.push ( Number ( match[2] ) );
+
+      } else { // New implicit segment
+
+        args = ARGS_COUNT[fn] - 1;
+        segment = [fn, Number ( match[2] )];
+        segments.push ( segment );
+
+      }
+
+    }
+
+    return segments as PathSegment[]; //TSC
+
+  };
+
+})();
+
 const node2path = ( node: Node ): string => {
 
   if ( node.type === 'root' ) {
@@ -153,4 +196,4 @@ const svg2path = ( svg: string ): string => { //TODO: Maybe publish this as a st
 
 /* EXPORT */
 
-export {char2entity, chars2entities, icon2glyph, icons2glyphs, icons2preview, icons2svg, icons2ttf, node2path, svg2path};
+export {char2entity, chars2entities, icon2glyph, icons2glyphs, icons2preview, icons2svg, icons2ttf, path2segments, node2path, svg2path};
