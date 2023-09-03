@@ -4,7 +4,6 @@
 import {ICON_PRECISION, ICON_SIZE} from './constants';
 import svg2ttf from './svg2ttf';
 import elementToPath from 'element-to-path';
-import Commander from 'svg-path-commander';
 import svgpath from 'svgpath';
 import XML from 'xml-simple-parser';
 import type {Node} from 'xml-simple-parser';
@@ -106,7 +105,7 @@ const node2path = ( node: Node ): string => {
 
       if ( !path ) return '';
 
-      return Commander.pathToString ( Commander.transformPath ( path, { translate: [-viewport[0], ICON_SIZE - viewport[1]], scale: [ICON_SIZE / viewport[2], - ICON_SIZE / viewport[3]], origin: [0, 0] } ), ICON_PRECISION );
+      return svgpath ( path ).scale ( ICON_SIZE / viewport[2], - ICON_SIZE / viewport[3] ).translate ( -viewport[0], ICON_SIZE - viewport[1] ).round ( ICON_PRECISION ).toString ();
 
     } else if ( node.name === 'g' ) {
 
