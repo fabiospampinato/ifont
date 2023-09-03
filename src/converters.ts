@@ -106,10 +106,7 @@ const node2path = ( node: Node ): string => {
 
       if ( !path ) return '';
 
-      const flip = ( path: string ) => new Commander ( path ).transform ({ scale: [1, -1], origin: [ICON_SIZE / 2, ICON_SIZE / 2] }).toString ();
-      const reframe = ( path: string ) => new Commander ( path ).transform ({ translate: [-viewport[0], -viewport[1]], scale: [ICON_SIZE / viewport[2], ICON_SIZE / viewport[3]], origin: [0, 0] }).toString ();
-
-      return flip ( reframe ( path ) );
+      return Commander.pathToString ( Commander.transformPath ( Commander.transformPath ( path, { translate: [-viewport[0], -viewport[1]], scale: [ICON_SIZE / viewport[2], ICON_SIZE / viewport[3]], origin: [0, 0] } ), { scale: [1, -1], origin: [ICON_SIZE / 2, ICON_SIZE / 2] } ), 2 );
 
     } else if ( node.name === 'g' ) {
 
