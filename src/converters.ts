@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import {ICON_PRECISION, ICON_SIZE} from './constants';
+import {ICON_SIZE} from './constants';
 import svg2ttf from './svg2ttf';
 import elementToPath from 'element-to-path';
 import svgpath from 'svgpath';
@@ -105,7 +105,7 @@ const node2path = ( node: Node ): string => {
 
       if ( !path ) return '';
 
-      return svgpath ( path ).scale ( ICON_SIZE / viewport[2], - ICON_SIZE / viewport[3] ).translate ( -viewport[0], ICON_SIZE - viewport[1] ).round ( ICON_PRECISION ).toString ();
+      return svgpath ( path ).scale ( ICON_SIZE / viewport[2], - ICON_SIZE / viewport[3] ).translate ( -viewport[0], ICON_SIZE - viewport[1] ).toString ();
 
     } else if ( node.name === 'g' ) {
 
