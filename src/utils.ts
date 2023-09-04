@@ -1,6 +1,12 @@
 
 /* MAIN */
 
+const castArray = <T> ( value: T[] | T ): T[] => {
+
+  return Array.isArray ( value ) ? value : [value];
+
+};
+
 const memoize = <T, U> ( fn: ( arg: T ) => U ): (( arg: T ) => U) => {
 
   const cache = new Map<T, U> ();
@@ -35,4 +41,4 @@ const without = <T> ( values: T[], value: T ): T[] => {
 
 /* EXPORT */
 
-export {memoize, round, without};
+export {castArray, memoize, round, without};
