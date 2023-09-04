@@ -12,10 +12,22 @@ import * as _ from './lib/lodash.js';
 import ucs2 from './lib/ucs2.js';
 import * as svg from './lib/svg.js';
 import * as sfnt from './lib/sfnt.js';
-
+import {memoize} from '../utils';
 
 var VERSION_RE = /^(Version )?(\d+[.]\d+)$/i;
 
+const path2contours = memoize((path, accuracy) => {
+  //SVG transformations
+  var svgPath = new SvgPath(path)
+    .abs()
+    .unshort()
+    .unarc()
+    .iterate(function (segment, index, x, y) {
+      return svg.cubicToQuad(segment, index, x, y, accuracy);
+    });
+  var sfntContours = svg.toSfntCoutours(svgPath);
+  return sfntContours;
+});
 
 function svg2ttf(svgString, options) {
   var font = new sfnt.Font();
@@ -175,15 +187,16 @@ function svg2ttf(svgString, options) {
     var glyphSize = Math.max(glyph.width, glyph.height);
     var accuracy = (glyphSize > 500) ? 0.3 : glyphSize * 0.0006;
 
-    //SVG transformations
-    var svgPath = new SvgPath(glyph.d)
-      .abs()
-      .unshort()
-      .unarc()
-      .iterate(function (segment, index, x, y) {
-        return svg.cubicToQuad(segment, index, x, y, accuracy);
-      });
-    var sfntContours = svg.toSfntCoutours(svgPath);
+    // //SVG transformations
+    // var svgPath = new SvgPath(glyph.d)
+    //   .abs()
+    //   .unshort()
+    //   .unarc()
+    //   .iterate(function (segment, index, x, y) {
+    //     return svg.cubicToQuad(segment, index, x, y, accuracy);
+    //   });
+    // var sfntContours = svg.toSfntCoutours(svgPath);
+    var sfntContours = path2contours(glyph.d, accuracy);
 
     // Add contours to SFNT font
     glyph.contours = _.map(sfntContours, function (sfntContour) {
