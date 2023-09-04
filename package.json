@@ -2,7 +2,7 @@
   "name": "ifont",
   "repository": "github:fabiospampinato/ifont",
   "description": "An isomorphic icon font generator with support for ligatures.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "sideEffects": false,
   "bin": "dist/bin.js",
