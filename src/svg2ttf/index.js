@@ -16,7 +16,8 @@ import {memoize} from '../utils';
 
 var VERSION_RE = /^(Version )?(\d+[.]\d+)$/i;
 
-const path2contours = memoize((path, accuracy) => {
+const path2contours = ((path) => {
+  var accuracy = 0.3;
   //SVG transformations
   var svgPath = new SvgPath(path)
     .abs()
@@ -196,7 +197,7 @@ function svg2ttf(svgString, options) {
     //     return svg.cubicToQuad(segment, index, x, y, accuracy);
     //   });
     // var sfntContours = svg.toSfntCoutours(svgPath);
-    var sfntContours = path2contours(glyph.d, accuracy);
+    var sfntContours = path2contours(glyph.d);
 
     // Add contours to SFNT font
     glyph.contours = _.map(sfntContours, function (sfntContour) {
