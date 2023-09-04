@@ -17,7 +17,7 @@ import {memoize} from '../utils';
 var VERSION_RE = /^(Version )?(\d+[.]\d+)$/i;
 
 const path2contours = ((path) => {
-  var accuracy = 0.3;
+  var accuracy = 1;
   //SVG transformations
   var svgPath = new SvgPath(path)
     .abs()

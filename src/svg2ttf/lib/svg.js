@@ -82,7 +82,7 @@ function load(icons) {
   var familyName = 'iFont';
   var subfamilyName = 'Regular';
   var id = (familyName + '-' + subfamilyName).replace(/[\s\(\)\[\]<>%\/]/g, '').substr(0, 62);
-  var size = 1024;
+  var size = 240;
 
   var font = {
     id: id,
