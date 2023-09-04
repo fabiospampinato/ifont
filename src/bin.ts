@@ -11,7 +11,7 @@ import {bin, color} from 'specialist';
 import open from 'tiny-open';
 import zeptoid from 'zeptoid';
 import ifont from '.';
-import {icons2preview, icons2stats} from './converters';
+import {icons2preview, icons2stats, unicode2chars} from './converters';
 import {castArray} from './utils';
 import type {Icon} from './types';
 
@@ -20,7 +20,7 @@ import type {Icon} from './types';
 const paths2icons = ( iconsPaths: string[] | string ): Icon[] => {
   return castArray ( iconsPaths ).map ( iconPath => ({
     content: fs.readFileSync ( path.join ( process.cwd (), iconPath ), 'utf8' ),
-    name: path.basename ( iconPath, '.svg' )
+    name: unicode2chars ( path.basename ( iconPath, '.svg' ) )
   }));
 };
 

@@ -214,6 +214,12 @@ const svg2path = memoize (( svg: string ): string => { //TODO: Maybe publish thi
 
 });
 
+const unicode2chars = ( unicode: string ): string => {
+
+  return unicode.replaceAll ( /(u?\d{4})/g, unicode => String.fromCharCode ( parseInt ( unicode.slice ( -4 ), 16 ) ) );
+
+};
+
 /* EXPORT */
 
-export {char2entity, chars2entities, icon2glyph, icons2glyphs, icons2preview, icons2stats, icons2svg, icons2ttf, path2segments, node2path, svg2path};
+export {char2entity, chars2entities, icon2glyph, icons2glyphs, icons2preview, icons2stats, icons2svg, icons2ttf, path2segments, node2path, svg2path, unicode2chars};
