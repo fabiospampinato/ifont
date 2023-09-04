@@ -62,6 +62,7 @@ bin ( 'ifont', 'An icon font builder' )
   .action ( options => {
 
     const icons = paths2icons ( options['icon'] );
+    const font = ifont ({ icons });
     const stats = icons2stats ( icons );
     const statsAZ = [...stats].sort ( ( a, b ) => a.size - b.size );
 
@@ -70,6 +71,9 @@ bin ( 'ifont', 'An icon font builder' )
       console.log ( `${stat.name}${color.dim ( ':' )} ${color.cyan ( String ( stat.size ) )}` );
 
     }
+
+    console.log ( color.dim ( '---' ) );
+    console.log ( `Total${color.dim ( ':' )} ${color.cyan ( String ( font.byteLength ) )}` );
 
   })
   /* RUN */
