@@ -7,11 +7,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
-import {bin} from 'specialist';
+import {bin, color} from 'specialist';
 import open from 'tiny-open';
 import zeptoid from 'zeptoid';
 import ifont from '.';
-import {icons2preview} from './converters';
+import {icons2preview, icons2stats} from './converters';
 import type {Icon} from './types';
 
 /* HELPERS */
@@ -30,7 +30,7 @@ bin ( 'ifont', 'An icon font builder' )
   .command ( 'build', 'Build the icon font from the provided icons' )
   .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { eager: true } )
   .option ( '--output, -o <path>', 'Path to the destination of the font', { default: 'iFont.ttf' } )
-  .action ( ( options ) => {
+  .action ( options => {
 
     const icons = paths2icons ( options['icon'] );
     const font = ifont ({ icons });
@@ -54,6 +54,22 @@ bin ( 'ifont', 'An icon font builder' )
     fs.writeFileSync ( previewPath, preview );
 
     open ( previewPath );
+
+  })
+  /* STATS */
+  .command ( 'stats', 'Show size statistics about the provided icons' )
+  .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { eager: true } )
+  .action ( options => {
+
+    const icons = paths2icons ( options['icon'] );
+    const stats = icons2stats ( icons );
+    const statsAZ = [...stats].sort ( ( a, b ) => a.size - b.size );
+
+    for ( const stat of statsAZ ) {
+
+      console.log ( `${stat.name}${color.dim ( ':' )} ${color.cyan ( String ( stat.size ) )}` );
+
+    }
 
   })
   /* RUN */

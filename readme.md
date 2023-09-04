@@ -22,6 +22,9 @@ ifont build -i resources/icons/*.svg -o dist/IconFont.ttf
 
 # Preview an icon font from some SVG icons
 ifont preview -i resources/icons/*.svg
+
+# List icons by bytes needed once added to the TTF font
+ifont stats -i resources/icons/*.svg
 ```
 
 You would use the programmatic API like this:

@@ -37,6 +37,11 @@ type PathSegment = (
   ['Z']
 );
 
+type Stat = {
+  name: string,
+  size: number
+};
+
 /* EXPORT */
 
-export type {Glyph, Icon, Options, PathSegment};
+export type {Glyph, Icon, Options, PathSegment, Stat};

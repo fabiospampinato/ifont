@@ -7,8 +7,8 @@ import XML from 'xml-simple-parser';
 import type {Node} from 'xml-simple-parser';
 import {ICON_SIZE} from './constants';
 import svg2ttf from './svg2ttf';
-import {memoize} from './utils';
-import type {Glyph, Icon, PathSegment} from './types';
+import {memoize, without} from './utils';
+import type {Glyph, Icon, PathSegment, Stat} from './types';
 
 /* MAIN */
 
@@ -59,6 +59,25 @@ const icons2preview = ( icons: Icon[], font: string ): string => {
   const template = TEMPLATE.replace ( '{{SAMPLES}}', samples ).replace ( 'font.ttf', font );
 
   return template;
+
+};
+
+const icons2stats = ( icons: Icon[] ): Stat[] => {
+
+  const font = icons2ttf ( icons );
+  const fontSize = font.byteLength;
+
+  return icons.map ( icon => {
+
+    const name = icon.name;
+    const iconsWithout = without ( icons, icon );
+    const fontWithout = icons2ttf ( iconsWithout );
+    const fontWithoutSize = fontWithout.byteLength;
+    const size = ( fontSize - fontWithoutSize );
+
+    return { name, size };
+
+  });
 
 };
 
@@ -197,4 +216,4 @@ const svg2path = memoize (( svg: string ): string => { //TODO: Maybe publish thi
 
 /* EXPORT */
 
-export {char2entity, chars2entities, icon2glyph, icons2glyphs, icons2preview, icons2svg, icons2ttf, path2segments, node2path, svg2path};
+export {char2entity, chars2entities, icon2glyph, icons2glyphs, icons2preview, icons2stats, icons2svg, icons2ttf, path2segments, node2path, svg2path};

@@ -21,6 +21,18 @@ const memoize = <T, U> ( fn: ( arg: T ) => U ): (( arg: T ) => U) => {
 
 };
 
+const round = ( value: number, precision: number ): number => {
+
+  return Math.round ( value / precision ) * precision;
+
+};
+
+const without = <T> ( values: T[], value: T ): T[] => {
+
+  return values.filter ( other => other !== value );
+
+};
+
 /* EXPORT */
 
-export {memoize};
+export {memoize, round, without};
