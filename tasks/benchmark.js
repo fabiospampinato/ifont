@@ -7,15 +7,18 @@ import {ICONS} from '../test/fixtures.js';
 
 /* MAIN */
 
-benchmark.config ({
-  iterations: 1000
-});
-
 benchmark ({
-  name: 'build',
+  name: 'fresh',
+  iterations: 1,
   fn: () => {
     ifont ({ icons: ICONS });
   }
 });
 
-benchmark.summary ();
+benchmark ({
+  name: 'rest',
+  iterations: 10,
+  fn: () => {
+    ifont ({ icons: ICONS });
+  }
+});

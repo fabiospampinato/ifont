@@ -1,12 +1,13 @@
 
 /* IMPORT */
 
-import {ICON_SIZE} from './constants';
-import svg2ttf from './svg2ttf';
 import elementToPath from 'element-to-path';
 import svgpath from 'svgpath';
 import XML from 'xml-simple-parser';
 import type {Node} from 'xml-simple-parser';
+import {ICON_SIZE} from './constants';
+import svg2ttf from './svg2ttf';
+import {memoize} from './utils';
 import type {Glyph, Icon, PathSegment} from './types';
 
 /* MAIN */
@@ -188,11 +189,11 @@ const node2path = ( node: Node ): string => {
 
 };
 
-const svg2path = ( svg: string ): string => { //TODO: Maybe publish this as a standalone package
+const svg2path = memoize (( svg: string ): string => { //TODO: Maybe publish this as a standalone package
 
   return node2path ( XML.parse ( svg ) );
 
-};
+});
 
 /* EXPORT */
 
