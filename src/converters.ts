@@ -168,7 +168,29 @@ const node2path = ( node: Node ): string => {
 
       if ( !path ) return '';
 
-      return svgpath ( path ).scale ( ICON_SIZE / viewport[2], - ICON_SIZE / viewport[3] ).translate ( -viewport[0], ICON_SIZE - viewport[1] ).toString ();
+      const [x, y, w, h] = viewport;
+
+      if ( h >= w ) {
+
+        const scaleX = ( ICON_SIZE / w ) * ( w / h );
+        const scaleY = - ( ICON_SIZE / h );
+        const width = Math.abs ( w * scaleX );
+        const translateX = ( - ( x * scaleX ) ) + ( ( ICON_SIZE - width ) / 2 );
+        const translateY = ( ICON_SIZE - ( y * scaleY ) );
+
+        return svgpath ( path ).scale ( scaleX, scaleY ).translate ( translateX, translateY ).toString ();
+
+      } else {
+
+        const scaleX = ( ICON_SIZE / w );
+        const scaleY = - ( ICON_SIZE / h ) * ( h / w );
+        const height = Math.abs ( h * scaleY );
+        const translateX = - ( x * scaleX );
+        const translateY = ( ICON_SIZE - ( y * scaleY ) ) - ( ( ICON_SIZE - height ) / 2 );
+
+        return svgpath ( path ).scale ( scaleX, scaleY ).translate ( translateX, translateY ).toString ();
+
+      }
 
     } else if ( node.name === 'g' ) {
 
