@@ -29,7 +29,7 @@ const paths2icons = ( iconsPaths: string[] | string ): Icon[] => {
 bin ( 'ifont', 'An icon font builder' )
   /* BUILD */
   .command ( 'build', 'Build the icon font from the provided icons' )
-  .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { eager: true } )
+  .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { default: [], eager: true } )
   .option ( '--output, -o <path>', 'Path to the destination of the font', { default: 'iFont.ttf' } )
   .action ( options => {
 
@@ -42,7 +42,7 @@ bin ( 'ifont', 'An icon font builder' )
   })
   /* PREVIEW */
   .command ( 'preview', 'Preview the icon font from the provided icons' )
-  .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { eager: true } )
+  .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { default: [], eager: true } )
   .action ( options => {
 
     const icons = paths2icons ( options['icon'] );
@@ -59,7 +59,7 @@ bin ( 'ifont', 'An icon font builder' )
   })
   /* STATS */
   .command ( 'stats', 'Show size statistics about the provided icons' )
-  .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { eager: true } )
+  .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { default: [], eager: true } )
   .action ( options => {
 
     const icons = paths2icons ( options['icon'] );
