@@ -216,7 +216,7 @@ const svg2path = memoize (( svg: string ): string => { //TODO: Maybe publish thi
 
 const unicode2chars = ( unicode: string ): string => {
 
-  return unicode.replaceAll ( /(u?\d{4})/g, unicode => String.fromCharCode ( parseInt ( unicode.slice ( -4 ), 16 ) ) );
+  return unicode.replaceAll ( /(u[a-fA-F0-9]{4}|[0-9][a-fA-F0-9]{3})/g, unicode => String.fromCharCode ( parseInt ( unicode.slice ( -4 ), 16 ) ) );
 
 };
 
