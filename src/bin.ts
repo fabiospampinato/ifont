@@ -2,11 +2,11 @@
 
 /* IMPORT */
 
-import {Buffer} from 'node:buffer';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
+import Base64 from 'radix64-encoding';
 import {bin, color} from 'specialist';
 import open from 'tiny-open';
 import zeptoid from 'zeptoid';
@@ -47,7 +47,7 @@ bin ( 'ifont', 'An icon font builder' )
 
     const icons = paths2icons ( options['icon'] );
     const font = ifont ({ icons });
-    const fontB64 = Buffer.from ( font ).toString ( 'base64' );
+    const fontB64 = Base64.encode ( font );
     const fontB64Inline = `data:font/ttf;base64,${fontB64}`;
     const preview = icons2preview ( icons, fontB64Inline );
     const previewPath = path.join ( os.tmpdir (), `${zeptoid ()}.html` );
