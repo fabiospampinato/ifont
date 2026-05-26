@@ -3,7 +3,8 @@
 import * as _ from './lodash.js';
 import toTTF from './ttf.js';
 
-function Font() {
+class Font {
+  constructor() {
   this.ascent = 850;
   this.copyright = '';
   this.createdDate = new Date();
@@ -52,19 +53,18 @@ function Font() {
   this.int_descent = -150;
   this.xHeight = 0;
   this.capHeight = 0;
+  }
 
   //getters and setters
 
-  Object.defineProperty(this, 'descent', {
-    get: function () {
-      return this.int_descent;
-    },
-    set: function (value) {
-      this.int_descent = parseInt(Math.round(-Math.abs(value)), 10);
-    }
-  });
+  get descent() {
+    return this.int_descent;
+  }
+  set descent(value) {
+    this.int_descent = parseInt(Math.round(-Math.abs(value)), 10);
+  }
 
-  this.__defineGetter__('avgCharWidth', function () {
+  get avgCharWidth() {
     if (this.glyphs.length === 0) {
       return 0;
     }
@@ -73,206 +73,168 @@ function Font() {
     return parseInt(widths.reduce(function (prev, cur) {
       return prev + cur;
     }) / widths.length, 10);
-  });
+  }
 
-  Object.defineProperty(this, 'ySubscriptXSize', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_ySubscriptXSize) ? this.int_ySubscriptXSize : (this.width * 0.6347), 10);
-    },
-    set: function (value) {
-      this.int_ySubscriptXSize = value;
+  get ySubscriptXSize() {
+    return parseInt(!_.isUndefined(this.int_ySubscriptXSize) ? this.int_ySubscriptXSize : (this.width * 0.6347), 10);
+  }
+  set ySubscriptXSize(value) {
+    this.int_ySubscriptXSize = value;
+  }
+
+  get ySubscriptYSize() {
+    return parseInt(!_.isUndefined(this.int_ySubscriptYSize) ? this.int_ySubscriptYSize : ((this.ascent - this.descent) * 0.7), 10);
+  }
+  set ySubscriptYSize(value) {
+    this.int_ySubscriptYSize = value;
+  }
+
+  get ySubscriptYOffset() {
+    return parseInt(!_.isUndefined(this.int_ySubscriptYOffset) ? this.int_ySubscriptYOffset : ((this.ascent - this.descent) * 0.14), 10);
+  }
+  set ySubscriptYOffset(value) {
+    this.int_ySubscriptYOffset = value;
+  }
+
+  get ySuperscriptXSize() {
+    return parseInt(!_.isUndefined(this.int_ySuperscriptXSize) ? this.int_ySuperscriptXSize : (this.width * 0.6347), 10);
+  }
+  set ySuperscriptXSize(value) {
+    this.int_ySuperscriptXSize = value;
+  }
+
+  get ySuperscriptYSize() {
+    return parseInt(!_.isUndefined(this.int_ySuperscriptYSize) ? this.int_ySuperscriptYSize : ((this.ascent - this.descent) * 0.7), 10);
+  }
+  set ySuperscriptYSize(value) {
+    this.int_ySuperscriptYSize = value;
+  }
+
+  get ySuperscriptYOffset() {
+    return parseInt(!_.isUndefined(this.int_ySuperscriptYOffset) ? this.int_ySuperscriptYOffset : ((this.ascent - this.descent) * 0.48), 10);
+  }
+  set ySuperscriptYOffset(value) {
+    this.int_ySuperscriptYOffset = value;
+  }
+
+  get yStrikeoutSize() {
+    return parseInt(!_.isUndefined(this.int_yStrikeoutSize) ? this.int_yStrikeoutSize : ((this.ascent - this.descent) * 0.049), 10);
+  }
+  set yStrikeoutSize(value) {
+    this.int_yStrikeoutSize = value;
+  }
+
+  get yStrikeoutPosition() {
+    return parseInt(!_.isUndefined(this.int_yStrikeoutPosition) ? this.int_yStrikeoutPosition : ((this.ascent - this.descent) * 0.258), 10);
+  }
+  set yStrikeoutPosition(value) {
+    this.int_yStrikeoutPosition = value;
+  }
+
+  get minLsb() {
+    return parseInt(_.min(_.map(this.glyphs, 'xMin')), 10);
+  }
+
+  get minRsb() {
+    if (!this.glyphs.length) return parseInt(this.width, 10);
+
+    return parseInt(_.reduce(this.glyphs, function (minRsb, glyph) {
+      return Math.min(minRsb, glyph.width - glyph.xMax);
+    }, 0), 10);
+  }
+
+  get xMin() {
+    if (!this.glyphs.length) return this.width;
+
+    return _.reduce(this.glyphs, function (xMin, glyph) {
+      return Math.min(xMin, glyph.xMin);
+    }, 0);
+  }
+
+  get yMin() {
+    if (!this.glyphs.length) return this.width;
+
+    return _.reduce(this.glyphs, function (yMin, glyph) {
+      return Math.min(yMin, glyph.yMin);
+    }, 0);
+  }
+
+  get xMax() {
+    if (!this.glyphs.length) return this.width;
+
+    return _.reduce(this.glyphs, function (xMax, glyph) {
+      return Math.max(xMax, glyph.xMax);
+    }, 0);
+  }
+
+  get yMax() {
+    if (!this.glyphs.length) return this.width;
+
+    return _.reduce(this.glyphs, function (yMax, glyph) {
+      return Math.max(yMax, glyph.yMax);
+    }, 0);
+  }
+
+  get avgWidth() {
+    var len = this.glyphs.length;
+
+    if (len === 0) {
+      return this.width;
     }
-  });
 
-  Object.defineProperty(this, 'ySubscriptYSize', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_ySubscriptYSize) ? this.int_ySubscriptYSize : ((this.ascent - this.descent) * 0.7), 10);
-    },
-    set: function (value) {
-      this.int_ySubscriptYSize = value;
-    }
-  });
+    var sumWidth = _.reduce(this.glyphs, function (sumWidth, glyph) {
+      return sumWidth + glyph.width;
+    }, 0);
 
-  Object.defineProperty(this, 'ySubscriptYOffset', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_ySubscriptYOffset) ? this.int_ySubscriptYOffset : ((this.ascent - this.descent) * 0.14), 10);
-    },
-    set: function (value) {
-      this.int_ySubscriptYOffset = value;
-    }
-  });
+    return Math.round(sumWidth / len);
+  }
 
-  Object.defineProperty(this, 'ySuperscriptXSize', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_ySuperscriptXSize) ? this.int_ySuperscriptXSize : (this.width * 0.6347), 10);
-    },
-    set: function (value) {
-      this.int_ySuperscriptXSize = value;
-    }
-  });
+  get maxWidth() {
+    if (!this.glyphs.length) return this.width;
 
-  Object.defineProperty(this, 'ySuperscriptYSize', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_ySuperscriptYSize) ? this.int_ySuperscriptYSize : ((this.ascent - this.descent) * 0.7), 10);
-    },
-    set: function (value) {
-      this.int_ySuperscriptYSize = value;
-    }
-  });
+    return _.reduce(this.glyphs, function (maxWidth, glyph) {
+      return Math.max(maxWidth, glyph.width);
+    }, 0);
+  }
 
-  Object.defineProperty(this, 'ySuperscriptYOffset', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_ySuperscriptYOffset) ? this.int_ySuperscriptYOffset : ((this.ascent - this.descent) * 0.48), 10);
-    },
-    set: function (value) {
-      this.int_ySuperscriptYOffset = value;
-    }
-  });
+  get maxExtent() {
+    if (!this.glyphs.length) return this.width;
 
-  Object.defineProperty(this, 'yStrikeoutSize', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_yStrikeoutSize) ? this.int_yStrikeoutSize : ((this.ascent - this.descent) * 0.049), 10);
-    },
-    set: function (value) {
-      this.int_yStrikeoutSize = value;
-    }
-  });
-
-  Object.defineProperty(this, 'yStrikeoutPosition', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_yStrikeoutPosition) ? this.int_yStrikeoutPosition : ((this.ascent - this.descent) * 0.258), 10);
-    },
-    set: function (value) {
-      this.int_yStrikeoutPosition = value;
-    }
-  });
-
-  Object.defineProperty(this, 'minLsb', {
-    get: function () {
-      return parseInt(_.min(_.map(this.glyphs, 'xMin')), 10);
-    }
-  });
-
-  Object.defineProperty(this, 'minRsb', {
-    get: function () {
-      if (!this.glyphs.length) return parseInt(this.width, 10);
-
-      return parseInt(_.reduce(this.glyphs, function (minRsb, glyph) {
-        return Math.min(minRsb, glyph.width - glyph.xMax);
-      }, 0), 10);
-    }
-  });
-
-  Object.defineProperty(this, 'xMin', {
-    get: function () {
-      if (!this.glyphs.length) return this.width;
-
-      return _.reduce(this.glyphs, function (xMin, glyph) {
-        return Math.min(xMin, glyph.xMin);
-      }, 0);
-    }
-  });
-
-  Object.defineProperty(this, 'yMin', {
-    get: function () {
-      if (!this.glyphs.length) return this.width;
-
-      return _.reduce(this.glyphs, function (yMin, glyph) {
-        return Math.min(yMin, glyph.yMin);
-      }, 0);
-    }
-  });
-
-  Object.defineProperty(this, 'xMax', {
-    get: function () {
-      if (!this.glyphs.length) return this.width;
-
-      return _.reduce(this.glyphs, function (xMax, glyph) {
-        return Math.max(xMax, glyph.xMax);
-      }, 0);
-    }
-  });
-
-  Object.defineProperty(this, 'yMax', {
-    get: function () {
-      if (!this.glyphs.length) return this.width;
-
-      return _.reduce(this.glyphs, function (yMax, glyph) {
-        return Math.max(yMax, glyph.yMax);
-      }, 0);
-    }
-  });
-
-  Object.defineProperty(this, 'avgWidth', {
-    get: function () {
-      var len = this.glyphs.length;
-
-      if (len === 0) {
-        return this.width;
-      }
-
-      var sumWidth = _.reduce(this.glyphs, function (sumWidth, glyph) {
-        return sumWidth + glyph.width;
-      }, 0);
-
-      return Math.round(sumWidth / len);
-    }
-  });
-
-  Object.defineProperty(this, 'maxWidth', {
-    get: function () {
-      if (!this.glyphs.length) return this.width;
-
-      return _.reduce(this.glyphs, function (maxWidth, glyph) {
-        return Math.max(maxWidth, glyph.width);
-      }, 0);
-    }
-  });
-
-  Object.defineProperty(this, 'maxExtent', {
-    get: function () {
-      if (!this.glyphs.length) return this.width;
-
-      return _.reduce(this.glyphs, function (maxExtent, glyph) {
-        return Math.max(maxExtent, glyph.xMax /*- glyph.xMin*/);
-      }, 0);
-    }
-  });
+    return _.reduce(this.glyphs, function (maxExtent, glyph) {
+      return Math.max(maxExtent, glyph.xMax /*- glyph.xMin*/);
+    }, 0);
+  }
 
   // Property used for `sTypoLineGap` in OS/2 and not used for `lineGap` in HHEA, because
   // non zero lineGap causes bad offset in IE, https://github.com/fontello/svg2ttf/issues/37
-  Object.defineProperty(this, 'lineGap', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_lineGap) ? this.int_lineGap : ((this.ascent - this.descent) * 0.09), 10);
-    },
-    set: function (value) {
-      this.int_lineGap = value;
-    }
-  });
+  get lineGap() {
+    return parseInt(!_.isUndefined(this.int_lineGap) ? this.int_lineGap : ((this.ascent - this.descent) * 0.09), 10);
+  }
+  set lineGap(value) {
+    this.int_lineGap = value;
+  }
 
-  Object.defineProperty(this, 'underlinePosition', {
-    get: function () {
-      return parseInt(!_.isUndefined(this.int_underlinePosition) ? this.int_underlinePosition : ((this.ascent - this.descent) * 0.01), 10);
-    },
-    set: function (value) {
-      this.int_underlinePosition = value;
-    }
-  });
+  get underlinePosition() {
+    return parseInt(!_.isUndefined(this.int_underlinePosition) ? this.int_underlinePosition : ((this.ascent - this.descent) * 0.01), 10);
+  }
+  set underlinePosition(value) {
+    this.int_underlinePosition = value;
+  }
 }
 
 
-function Glyph() {
-  this.contours = [];
-  this.d = '';
-  this.id = '';
-  this.codes = []; // needed for nice validator error output
-  this.height = 0;
-  this.name = '';
-  this.width = 0;
-}
+class Glyph {
+  constructor() {
+    this.contours = [];
+    this.d = '';
+    this.id = '';
+    this.codes = []; // needed for nice validator error output
+    this.height = 0;
+    this.name = '';
+    this.width = 0;
+  }
 
-Object.defineProperty(Glyph.prototype, 'xMin', {
-  get: function () {
+  get xMin() {
     var xMin = 0;
     var hasPoints = false;
 
@@ -290,10 +252,8 @@ Object.defineProperty(Glyph.prototype, 'xMin', {
     }
     return hasPoints ? xMin : 0;
   }
-});
 
-Object.defineProperty(Glyph.prototype, 'xMax', {
-  get: function () {
+  get xMax() {
     var xMax = 0;
     var hasPoints = false;
 
@@ -311,10 +271,8 @@ Object.defineProperty(Glyph.prototype, 'xMax', {
     }
     return hasPoints ? xMax : this.width;
   }
-});
 
-Object.defineProperty(Glyph.prototype, 'yMin', {
-  get: function () {
+  get yMin() {
     var yMin = 0;
     var hasPoints = false;
 
@@ -332,10 +290,8 @@ Object.defineProperty(Glyph.prototype, 'yMin', {
     }
     return hasPoints ? yMin : 0;
   }
-});
 
-Object.defineProperty(Glyph.prototype, 'yMax', {
-  get: function () {
+  get yMax() {
     var yMax = 0;
     var hasPoints = false;
 
@@ -353,21 +309,27 @@ Object.defineProperty(Glyph.prototype, 'yMax', {
     }
     return hasPoints ? yMax : 0;
   }
-});
-
-function Contour() {
-  this.points = [];
 }
 
-function Point() {
-  this.onCurve = true;
-  this.x = 0;
-  this.y = 0;
+class Contour {
+  constructor() {
+    this.points = [];
+  }
 }
 
-function SfntName() {
-  this.id = 0;
-  this.value = '';
+class Point {
+  constructor() {
+    this.onCurve = true;
+    this.x = 0;
+    this.y = 0;
+  }
+}
+
+class SfntName {
+  constructor() {
+    this.id = 0;
+    this.value = '';
+  }
 }
 
 export {Font};

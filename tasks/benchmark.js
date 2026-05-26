@@ -17,7 +17,7 @@ benchmark ({
 
 benchmark ({
   name: 'rest',
-  iterations: 100,
+  iterations: 1_000,
   fn: () => {
     ifont ({ icons: ICONS });
   }
