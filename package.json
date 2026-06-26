@@ -2,6 +2,7 @@
   "name": "ifont",
   "repository": "github:fabiospampinato/ifont",
   "description": "An isomorphic icon font generator with support for ligatures.",
+  "license": "MIT",
   "version": "1.0.3",
   "type": "module",
   "sideEffects": false,
