@@ -16,9 +16,11 @@ benchmark ({
 });
 
 benchmark ({
-  name: 'rest',
+  name: 'incremental',
   iterations: 1_000,
   fn: () => {
-    ifont ({ icons: ICONS });
+    for ( let i = 1; i <= ICONS.length; i++ ) {
+      ifont ({ icons: ICONS.slice ( 0, i ) });
+    }
   }
 });

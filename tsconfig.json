@@ -2,6 +2,7 @@
   "extends": "tsex/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "noUnusedParameters": false
   }
 }

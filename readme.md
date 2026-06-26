@@ -4,12 +4,14 @@ An isomorphic icon font generator with support for ligatures.
 
 It generates a single TTF file from a list of SVG icons and their names, mapping each name to a ligature.
 
+If an SVG's name is in the form of `uXXXX.svg` then it will be understood as a Unicode codepoint rather than a ligature.
+
 It works in the browser too.
 
 ## Install
 
 ```sh
-npm install --save ifont
+npm install -g ifont
 ```
 
 ## Usage
@@ -49,4 +51,5 @@ fs.writeFileSync ( 'IconFont.ttf', ttf );
 ## License
 
 - `svg2ttf`: MIT © Vitaly Puzrin
+- `element-to-path`: MIT © Lionel Tzatzkin
 - Rest: MIT © Fabio Spampinato

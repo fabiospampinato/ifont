@@ -11,6 +11,7 @@ import {bin, color} from 'specialist';
 import open from 'tiny-open';
 import zeptoid from 'zeptoid';
 import ifont from '.';
+import {ICON_SIZE} from './constants';
 import {icons2preview, icons2stats, unicode2chars} from './converters';
 import {castArray} from './utils';
 import type {Icon} from './types';
@@ -19,8 +20,8 @@ import type {Icon} from './types';
 
 const paths2icons = ( iconsPaths: string[] | string ): Icon[] => {
   return castArray ( iconsPaths ).map ( iconPath => ({
-    content: fs.readFileSync ( path.join ( process.cwd (), iconPath ), 'utf8' ),
-    name: unicode2chars ( path.basename ( iconPath, '.svg' ) )
+    name: unicode2chars ( path.basename ( iconPath, '.svg' ) ),
+    svg: fs.readFileSync ( path.join ( process.cwd (), iconPath ), 'utf8' )
   }));
 };
 
@@ -31,10 +32,12 @@ bin ( 'ifont', 'An icon font builder' )
   .command ( 'build', 'Build the icon font from the provided icons' )
   .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { default: [], eager: true } )
   .option ( '--output, -o <path>', 'Path to the destination of the font', { default: 'iFont.ttf' } )
+  .option ( '--size, -s <number>', 'Internal icon size', { default: ICON_SIZE, type: 'number' } )
   .action ( options => {
 
     const icons = paths2icons ( options['icon'] );
-    const font = ifont ({ icons });
+    const size = options['size'];
+    const font = ifont ({ icons, size });
     const fontPath = path.join ( process.cwd (), options['output'] );
 
     fs.writeFileSync ( fontPath, font );
@@ -43,10 +46,12 @@ bin ( 'ifont', 'An icon font builder' )
   /* PREVIEW */
   .command ( 'preview', 'Preview the icon font from the provided icons' )
   .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { default: [], eager: true } )
+  .option ( '--size, -s <number>', 'Internal icon size', { default: ICON_SIZE, type: 'number' } )
   .action ( options => {
 
     const icons = paths2icons ( options['icon'] );
-    const font = ifont ({ icons });
+    const size = options['size'];
+    const font = ifont ({ icons, size });
     const fontB64 = Base64.encode ( font );
     const fontB64Inline = `data:font/ttf;base64,${fontB64}`;
     const preview = icons2preview ( icons, fontB64Inline );
@@ -60,11 +65,13 @@ bin ( 'ifont', 'An icon font builder' )
   /* STATS */
   .command ( 'stats', 'Show size statistics about the provided icons' )
   .option ( '--icon, -i <path...>', 'Path to an icon to include in the font', { default: [], eager: true } )
+  .option ( '--size, -s <number>', 'Internal icon size', { default: ICON_SIZE, type: 'number' } )
   .action ( options => {
 
     const icons = paths2icons ( options['icon'] );
-    const font = ifont ({ icons });
-    const stats = icons2stats ( icons );
+    const size = options['size'];
+    const font = ifont ({ icons, size });
+    const stats = icons2stats ( icons, size );
     const statsAZ = [...stats].sort ( ( a, b ) => a.size - b.size );
 
     for ( const stat of statsAZ ) {

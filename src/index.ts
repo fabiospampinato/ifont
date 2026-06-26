@@ -1,18 +1,22 @@
 
 /* IMPORT */
 
-import {icons2ttf} from './converters';
-import type {Glyph, Icon, Options} from './types';
+import {ICON_SIZE} from './constants';
+import svg2ttf from './svg2ttf';
+import type {Icon, Options} from './types';
 
 /* MAIN */
 
 const ifont = ( options: Options ): Uint8Array => {
 
-  return icons2ttf ( options.icons );
+  const icons = options.icons;
+  const size = options.size || ICON_SIZE;
+
+  return svg2ttf ( icons, { size } );
 
 };
 
 /* EXPORT */
 
 export default ifont;
-export type {Glyph, Icon, Options};
+export type {Icon, Options};
