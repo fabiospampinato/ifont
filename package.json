@@ -16,7 +16,9 @@
     "clean": "tsex clean",
     "compile": "tsex compile",
     "compile:watch": "tsex compile --watch",
-    "test": "node dist/bin.js preview -i test/icons/*.svg",
+    "test": "npm run test:supported && npm run test:unsupported",
+    "test:supported": "node dist/bin.js preview -i test/icons_supported/*.svg",
+    "test:unsupported": "node dist/bin.js preview -i test/icons_unsupported/*.svg",
     "prepublishOnly": "tsex prepare"
   },
   "keywords": [
