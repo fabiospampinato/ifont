@@ -28,11 +28,40 @@ const icons2preview = ( icons: Icon[], font: string ): string => {
         '<meta charset="utf-8" />' +
         '<title>iFont | Preview</title>' +
         '<style>' +
-        '@font-face {font-family:{{FONT_NAME}};font-style:normal;font-weight:400;font-display:block;src:url({{FONT_FILE}}) format("opentype")}body{display:flex;flex-wrap:wrap;gap:6px}i.icon{display:inline-block;vertical-align:middle;font-family:{{FONT_NAME}};font-weight:400;font-style:normal;font-size:48px;width:48px;height:48px;border:1px solid #000;line-height:1;letter-spacing:normal;text-transform:none;word-wrap:normal;white-space:nowrap;direction:ltr;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:"liga"}' +
+          '@font-face {font-family:{{FONT_NAME}};font-style:normal;font-weight:400;font-display:block;src:url({{FONT_FILE}}) format("opentype")}' +
+          'body{display:flex;flex-wrap:wrap;gap:6px}' +
+          'body[data-view="wrapped"] #icons-wrapped{display:flex;flex-wrap:wrap;gap:6px}' +
+          'body[data-view="unwrapped"] #icons-unwrapped{display:flex;flex-wrap:wrap;gap:6px}' +
+          'body[data-view="both"] #icons-wrapped{display:flex;flex-wrap:wrap;gap:6px}' +
+          'body[data-view="both"] #icons-unwrapped{display:flex;flex-wrap:wrap;gap:6px}' +
+          '#icons-wrapped,#icons-unwrapped{display:none}' +
+          '#toolbar{position:sticky;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border-bottom:1px solid #ccc;box-sizing:border-box;width:100%}' +
+          '#toolbar label{font:14px sans-serif}' +
+          '#view{font:14px sans-serif;padding:2px 6px}' +
+          '.icon{display:inline-block;vertical-align:middle;font-family:{{FONT_NAME}};font-weight:400;font-style:normal;font-size:48px;width:48px;height:48px;border:1px solid #000;line-height:1;letter-spacing:normal;text-transform:none;word-wrap:normal;white-space:nowrap;direction:ltr;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:"liga"}' +
         '</style>' +
       '</head>' +
-      '<body>{{ICONS_WRAPPED}}</body>' +
-      '<i class="icon" style="width: auto; height: auto; white-space: break-spaces; margin-top: 100px;">{{ICONS_UNWRAPPED}}</i>' +
+      '<body data-view="wrapped">' +
+        '<div id="toolbar">' +
+          '<label for="view">View:</label>' +
+          '<select id="view">' +
+            '<option value="wrapped">wrapped</option>' +
+            '<option value="unwrapped">unwrapped</option>' +
+            '<option value="both">both</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="icons-wrapped">' +
+          '{{ICONS_WRAPPED}}' +
+        '</div>' +
+        '<div id="icons-unwrapped">' +
+          '<span class="icon" style="width: auto; height: auto; white-space: break-spaces;">' +
+            '{{ICONS_UNWRAPPED}}' +
+          '</span>' +
+        '</div>' +
+        '<script>' +
+          '(function(){var s=document.getElementById("view");var b=document.body;b.setAttribute("data-view",s.value);s.addEventListener("change",function(){b.setAttribute("data-view",s.value)});})();' +
+        '</script>' +
+      '</body>' +
     '</html>'
   );
 
