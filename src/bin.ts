@@ -12,7 +12,7 @@ import open from 'tiny-open';
 import zeptoid from 'zeptoid';
 import ifont from '.';
 import {ICON_SIZE} from './constants';
-import {icons2preview, icons2stats, unicode2chars} from './converters';
+import {icons2preview, icons2stats, name2names} from './converters';
 import {castArray} from './utils';
 import type {Icon} from './types';
 
@@ -20,7 +20,7 @@ import type {Icon} from './types';
 
 const paths2icons = ( iconsPaths: string[] | string ): Icon[] => {
   return castArray ( iconsPaths ).map ( iconPath => ({
-    name: unicode2chars ( path.basename ( iconPath, '.svg' ) ),
+    name: name2names ( path.basename ( iconPath, '.svg' ) ),
     svg: fs.readFileSync ( path.join ( process.cwd (), iconPath ), 'utf8' )
   }));
 };

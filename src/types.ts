@@ -2,7 +2,7 @@
 /* MAIN */
 
 type Icon = {
-  name: string,
+  name: string[] | string,
   svg: string
 };
 

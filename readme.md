@@ -6,6 +6,8 @@ It generates a single TTF file from a list of SVG icons and their names, mapping
 
 If an SVG's name is in the form of `uXXXX.svg` then it will be understood as a Unicode codepoint rather than a ligature.
 
+If an SVG's name contains `|`, for example `circle|round.svg`, then it will be understood as having multiple ligatures, in this case `circle` and `round`.
+
 It works in the browser too.
 
 ## Install

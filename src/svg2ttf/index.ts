@@ -5,6 +5,7 @@ import Buffer from './objects/buffer';
 import Font from './objects/font';
 import Glyph, {getGlyph} from './objects/glyph';
 import createTTF from './ttf';
+import {castArray} from './utils';
 import type {Dict, Icon, Ligature, Options} from './types';
 
 /* MAIN */
@@ -32,26 +33,6 @@ const svg2ttf = ( icons: Icon[], options: Options ): Buffer => {
 
   for ( const icon of icons ) {
 
-    const unicode = [...icon.name].map ( char => char.charCodeAt ( 0 ) );
-
-    /* CODE POINT GLYPHS */
-
-    for ( const codePoint of unicode ) {
-
-      if ( glyphByCodePoint[codePoint] ) continue;
-
-      const codePointGlyph = getGlyph ({
-        id: glyphId++,
-        svg: '',
-        height: 0,
-        width: 0
-      });
-
-      glyphByCodePoint[codePoint] = codePointGlyph;
-      glyphs.push ( codePointGlyph );
-
-    }
-
     /* LIGATURE GLYPH */
 
     const ligatureGlyph = getGlyph ({
@@ -62,7 +43,32 @@ const svg2ttf = ( icons: Icon[], options: Options ): Buffer => {
     });
 
     glyphs.push ( ligatureGlyph );
-    ligatures.push ({ unicode, glyph: ligatureGlyph });
+
+    /* CODE POINTS & LIGATURES */
+
+    for ( const name of castArray ( icon.name ) ) {
+
+      const unicode = [...name].map ( char => char.charCodeAt ( 0 ) );
+
+      for ( const codePoint of unicode ) {
+
+        if ( glyphByCodePoint[codePoint] ) continue;
+
+        const codePointGlyph = getGlyph ({
+          id: glyphId++,
+          svg: '',
+          height: 0,
+          width: 0
+        });
+
+        glyphByCodePoint[codePoint] = codePointGlyph;
+        glyphs.push ( codePointGlyph );
+
+      }
+
+      ligatures.push ({ unicode, glyph: ligatureGlyph });
+
+    }
 
   }
 

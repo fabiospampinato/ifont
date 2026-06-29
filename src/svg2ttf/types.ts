@@ -15,8 +15,8 @@ type Contour = Array<{
 type Dict<K extends number | string | symbol, V> = Partial<Record<K, V>>;
 
 type Icon = {
-  svg: string,
-  name: string
+  name: string[] | string,
+  svg: string
 };
 
 type Ligature = {

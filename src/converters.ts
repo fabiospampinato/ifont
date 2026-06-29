@@ -2,7 +2,8 @@
 /* IMPORT */
 
 import ifont from '.';
-import {without} from './utils';
+import {ICON_NAMES_SPLIT_CHAR, ICON_NAMES_SPLIT_RE} from './constants';
+import {castArray, without} from './utils';
 import type {Icon, Stat} from './types';
 
 /* MAIN */
@@ -65,8 +66,8 @@ const icons2preview = ( icons: Icon[], font: string ): string => {
     '</html>'
   );
 
-  const iconsEntities = icons.map ( icon => chars2entities ( icon.name ) );
-  const iconsWrapped = icons.map ( ( icon, i ) => `<i class="icon" title="${iconsEntities[i]}">${iconsEntities[i]}</i>` ).join ( '' );
+  const iconsEntities = icons.flatMap ( icon => castArray ( icon.name ).map ( chars2entities ) );
+  const iconsWrapped = icons.flatMap ( icon => castArray ( icon.name ).map ( name => `<i class="icon" title="${chars2entities ( name )}">${chars2entities ( name )}</i>` ) ).join ( '' );
   const iconsUnwrapped = iconsEntities.join ( '\u200b' );
 
   const templateWithWrapped = TEMPLATE.replace ( '{{ICONS_WRAPPED}}', iconsWrapped );
@@ -84,7 +85,7 @@ const icons2stats = ( icons: Icon[], iconSize: number ): Stat[] => {
 
   return icons.map ( icon => {
 
-    const name = icon.name;
+    const name = castArray ( icon.name ).join ( ICON_NAMES_SPLIT_CHAR );
     const iconsWithout = without ( icons, icon );
     const fontWithout = ifont ({ icons: iconsWithout, size: iconSize });
     const fontWithoutSize = fontWithout.byteLength;
@@ -93,6 +94,12 @@ const icons2stats = ( icons: Icon[], iconSize: number ): Stat[] => {
     return { name, size };
 
   });
+
+};
+
+const name2names = ( name: string ): string[] => {
+
+  return name.split ( ICON_NAMES_SPLIT_RE ).filter ( Boolean ).map ( unicode2chars );
 
 };
 
@@ -115,4 +122,4 @@ const unicode2chars = ( unicode: string ): string => {
 
 /* EXPORT */
 
-export {char2entity, chars2entities, icons2preview, icons2stats, unicode2chars};
+export {char2entity, chars2entities, icons2preview, icons2stats, name2names, unicode2chars};

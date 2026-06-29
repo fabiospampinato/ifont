@@ -5,6 +5,10 @@ const {abs, floor, log, max, min, pow, round, sqrt, trunc} = Math;
 
 /* MAIN */
 
+const castArray = <T> ( value: T[] | T ): T[] => {
+  return Array.isArray ( value ) ? value : [value];
+};
+
 const chars2number = ( chars: string ): number => { // This converts 4 chars to a I32
   return [...chars].reduce ( ( acc, value ) => ( acc << 8 ) + value.charCodeAt ( 0 ), 0 );
 };
@@ -28,4 +32,4 @@ const sumBy = <T> ( values: T[], fn: ( value: T ) => number ): number => {
 /* EXPORT */
 
 export {abs, floor, log, max, min, pow, round, sqrt, trunc};
-export {chars2number, clamp, maxBy, minBy, sumBy};
+export {castArray, chars2number, clamp, maxBy, minBy, sumBy};
